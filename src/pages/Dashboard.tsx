@@ -1,14 +1,14 @@
-import { FC } from "react";
+import React, { FC, Suspense } from "react";
 import { useAppSelector } from "../app/store";
 import { useQuery } from "@tanstack/react-query";
-import Chart, { ChartDataItem } from "../components/Chart";
+const Chart = React.lazy(() => import("../components/Chart"));
 import axiosInstance from "../utils/axiosInstance";
 import Navbar from "../components/Navbar";
 
 interface CustomerDataResponse {
   status: string;
   data: {
-    daily_joins: ChartDataItem[];
+    daily_joins: import("../components/Chart").ChartDataItem[];
     start_date: string;
     end_date: string;
   };
@@ -20,7 +20,8 @@ const fetchCustomerData = async (): Promise<CustomerDataResponse> => {
       "/c/9371-4923-495b-9217"
     );
     return res.data;
-  } catch (error) {
+  } catch (e) {
+    console.error(e);
     throw new Error("Error fetching customer data.");
   }
 };
@@ -47,8 +48,11 @@ const Dashboard: FC = () => {
         <h2 className="text-xl mb-4">Customers Joined per Day</h2>
         {isLoading && <p>Loading data...</p>}
         {error && <p className="text-red-500">Error fetching data.</p>}
-
-        {data && <Chart data={data.data.daily_joins} />}
+        {data && (
+          <Suspense fallback={<div>Loading chart...</div>}>
+            <Chart data={data.data.daily_joins} />
+          </Suspense>
+        )}
       </section>
     </div>
   );

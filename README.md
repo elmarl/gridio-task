@@ -22,4 +22,6 @@ I implemented basic routing using `react-router-dom`. To make sure that only log
 
 Below on the dashboard there is a bar chart made using Recharts, it fetches the data from the mock endpoint provided: https://dummyjson.com/c/9371-4923-495b-9217. I chose Recharts because I have used it before recently and it's well known. The chart allows the user to select a time frame to display. It calculates a moving average for additional information and can also show data for each point as a tooltip if the user hovers the mouse over it. I also implemented a basic date formatter for the time range selector so it would display `Jan 1` instead of `2024-01-01`.
 
+The chart component is lazily loaded, reducing initial bundle size.
+
 The application is responsive.
