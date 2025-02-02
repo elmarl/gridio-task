@@ -2,29 +2,11 @@ import React, { FC, Suspense } from "react";
 import { useAppSelector } from "../app/store";
 import { useQuery } from "@tanstack/react-query";
 const Chart = React.lazy(() => import("../components/Chart"));
-import axiosInstance from "../utils/axiosInstance";
+import {
+  fetchCustomerData,
+  CustomerDataResponse,
+} from "../services/customerService";
 import Navbar from "../components/Navbar";
-
-interface CustomerDataResponse {
-  status: string;
-  data: {
-    daily_joins: import("../components/Chart").ChartDataItem[];
-    start_date: string;
-    end_date: string;
-  };
-}
-
-const fetchCustomerData = async (): Promise<CustomerDataResponse> => {
-  try {
-    const res = await axiosInstance.get<CustomerDataResponse>(
-      "/c/9371-4923-495b-9217"
-    );
-    return res.data;
-  } catch (e) {
-    console.error(e);
-    throw new Error("Error fetching customer data.");
-  }
-};
 
 const Dashboard: FC = () => {
   const user = useAppSelector((store) => store.auth.user);
